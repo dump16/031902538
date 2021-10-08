@@ -13,7 +13,7 @@ import java.util.*;
 
 public class Tool {
 
-    public HashMap<String,String> dictMap = new HashMap<String, String>();
+    public HashMap<String,String> dictMap = new HashMap<>();
     public HashSet set;
 
     //  中文敏感词拼音替代、拼音首字母替代
@@ -43,7 +43,7 @@ public class Tool {
     public void initDictMap() throws IOException {
         InputStream path = Thread.currentThread().getContextClassLoader().getResourceAsStream("chaizi.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(path, StandardCharsets.UTF_8));
-        String str = "";
+        String str;
         while ((str = reader.readLine()) != null) {
             String[] buff = str.split("\"");
             for(int i = 0; i < buff.length; i++){
@@ -74,7 +74,7 @@ public class Tool {
 
     public static int checkKeyword(int line, String txt, HashMap keywordMap, ArrayList<String> ansArr)throws PinyinException{
         int matchNum = 0;           //  敏感词数量
-        String keyword = "";        //  匹配敏感词
+        StringBuilder keyword = new StringBuilder();        //  匹配敏感词
         int beginIndex = 0;         //  文本首部位置
         int length = 0;             //  文本长度
         char word;
@@ -99,16 +99,16 @@ public class Tool {
                     beginIndex = i;
                 }
                 length++;
-                keyword += word;
+                keyword.append(word);
                 //  判断该字是否为结尾字
                 if("1".equals(currMap.get("isEnd"))){
-                    if(i != txt.length() - 1 && (Map) currMap.get(txt.charAt(i+1)) != null){    //   最大规则
+                    if(i != txt.length() - 1 && currMap.get(txt.charAt(i+1)) != null){    //   最大规则
                         continue;
                     }
                     matchNum++;
                     ansArr.add("Line" + line + ": <" + keyword + ">"+txt.substring(beginIndex, beginIndex + length));
                     length = 0;
-                    keyword = "";
+                    keyword = new StringBuilder();
                     currMap = keywordMap;
                 }
 
@@ -132,13 +132,13 @@ public class Tool {
                                 beginIndex = i;
                             }
                             length++;
-                            keyword += word;
+                            keyword.append(word);
                             //  这里的currMap还有问题
                             if("1".equals(currMap.get("isEnd"))){
                                 matchNum++;
                                 ansArr.add("Line" + line + ": <" + keyword + ">"+txt.substring(beginIndex, beginIndex + length));
                                 length = 0;
-                                keyword = "";
+                                keyword = new StringBuilder();
                                 currMap = keywordMap;
                             }
                         }else if(currMap == null){     //  不存在
@@ -146,7 +146,7 @@ public class Tool {
                                 i--;
                             }
                             length = 0;
-                            keyword = "";
+                            keyword = new StringBuilder();
                             currMap = keywordMap;
                             break;
                         }
@@ -156,7 +156,7 @@ public class Tool {
                         i--;
                     }
                     length = 0;
-                    keyword = "";
+                    keyword = new StringBuilder();
                     currMap = keywordMap;
                 }
             }

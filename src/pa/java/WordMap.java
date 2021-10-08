@@ -1,7 +1,6 @@
 package pa.java;
 
 import com.github.stuxuhai.jpinyin.PinyinException;
-import pa.java.Tool;
 
 import java.io.BufferedReader;
 import java.io.File;
